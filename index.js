@@ -9,9 +9,10 @@ const { readFileSync } = require('fs')
 const { join } = require('path')
 const resolvers = require('./lib/resolvers')
 //const passport = require('passport')
+const { config } = require('./config')
 
 const app = express()
-const port = process.env.port || 3000
+const port = config.port
 const isDev = process.env.NODE_ENV.trimRight() !== 'production'
 
 
