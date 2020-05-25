@@ -1,3 +1,16 @@
+enum UserLevel {
+  superadmin
+  admin
+  regular
+}
+
+type User {
+  _id: ID!
+  username: String!
+  name: String!
+  level: UserLevel!
+}
+
 "Valida los tipos de nivel"
 
 enum Level {
@@ -39,6 +52,8 @@ type Monitor implements Person {
 }
 
 type Query {
+  "Devuelve los users"
+  getUsers: [User]
   "Devuelve los cursos"
   getCourses: [Course]
   "Devuelve un curso"
@@ -49,6 +64,12 @@ type Query {
   getPerson(id: ID!): Person
   "Ejecuta una busqueda global"
   searchItems(keyword: String!): [GlobalSearch]
+}
+
+input UserInput {
+  username: String!
+  name: String!
+  level: UserLevel!
 }
 
 input CourseInput {
@@ -81,6 +102,8 @@ input PersonEditInput {
 }
 
 type Mutation {
+  "Crea un usuario"
+  createUser(input: UserInput!): User
   "Crea un curso"
   createCourse(input: CourseInput!): Course
   "Edita un curso"

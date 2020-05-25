@@ -13,7 +13,7 @@ const { config } = require('./config')
 
 const app = express()
 const port = config.port
-const isDev = process.env.NODE_ENV.trimRight() !== 'production'
+const isDev = process.env.NODE_ENV !== 'production'
 
 
 // definir el schema
