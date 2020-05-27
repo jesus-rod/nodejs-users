@@ -6,59 +6,52 @@ const express = require('express')
 const cors = require('cors')
 const gqlMiddleware = require('express-graphql')
 const { readFileSync } = require('fs')
-const { join } = require('path')
+
 const resolvers = require('./lib/resolvers')
 //const passport = require('passport')
 const { config } = require('./config')
-const path = require('path')
-const http = require('http')
+const { join } = require('path')
+const connectDb = require('./lib/db')
+const errorHandler = require('./lib/errorHandler')
 
 
 const port = config.port
 const isDev = process.env.NODE_ENV !== 'production'
 
+const app = express()
+app.use(cors())
+
+//conectarse a base de datos
+connectDb()
+
+try {
+  connectDb()
+} catch (error) {
+  errorHandler(error)
+}
 
 // definir el schema
 const typeDefs = readFileSync(
   join(__dirname, 'lib', 'schema.graphql'),
   'utf-8'
 )
-
 const schema = makeExecutableSchema({ typeDefs , resolvers })
 
-const app = express()
-app.use(cors())
+// Define el path de nuestra app (hacia el frontend)
+app.set('appPath', join(config.root, 'frontend'))
 
-//require('./config/express').default(app);
-app.set('appPath', path.join(config.root, 'frontend'))
-console.log(`${app.get('appPath')}`)
-require('./routes').MyRoutes(app);
-
-// Middleware defs
-////app.use(passport.initialize())
-////app.use(passport.session())
-
+// Define nuestro GraphQL -> schema, resolvers y GUI
 app.use('/api', gqlMiddleware({
   schema: schema,
   rootValue: resolvers,
   graphiql: isDev
 }))
 
+// Define el resto de las rutas en nuestra aplicacion
+require('./routes').MyRoutes(app);
+
+
+
 app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port}/api`)
 })
-
-var server = http.createServer(app);
-
-
-function startServer() {
-  app.angularFullstack = server.listen(port, "localhost", function() {
-    console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
-  });
-}
-
-setImmediate(startServer);
-
-
-// Expose app
-exports = module.exports = app;

@@ -6,10 +6,13 @@
 
 const errors = require('./components/errors');
 const path = require('path');
+const bodyParser = require('body-parser')
 
 const MyRoutes = function(app) {
   // Insert routes below
-  app.use('/api/users', require('./api/users'));
+  // parse application/json
+  app.use(bodyParser.json());
+  app.use('/apix/users', require('./api/users'));
 
   app.use('/auth', require('./auth').router);
 

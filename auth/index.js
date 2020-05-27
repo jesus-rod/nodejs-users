@@ -1,7 +1,6 @@
 'use strict';
 
 const express = require('express');
-//const { config } = require('../config')
 const User = require('../api/users/user.schema')
 
 

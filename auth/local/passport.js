@@ -1,11 +1,22 @@
 const passport = require('passport');
-const {Strategy} = require('passport-local');
+const { Strategy } = require('passport-local');
+// const mongoose = require('mongoose')
+// const User = require('../api/users/user.schema')
+const connectDb = require('../../lib/db')
 
-function localAuthenticate(User, email, password, done) {
-  User.findOne({
-    email: email.toLowerCase()
-  }).exec()
-    .then(user => {
+const localAuthenticate = async(User, email, password, done) => {
+ console.log('local authenticate with email', email)
+ 
+     
+  let user
+  let db
+
+    try {
+      db = await connectDb()
+      user = await User.findOne({
+        email: email.toLowerCase()
+      })
+      console.log("user name is", user.name)
       if(!user) {
         return done(null, false, {
           message: 'Este correo no se encuentra registrado en el sistema.'
@@ -16,13 +27,18 @@ function localAuthenticate(User, email, password, done) {
           return done(authError);
         }
         if(!authenticated) {
-          return done(null, false, { message: 'Clave errada.' });
+          return done(null, false, {
+             message: ' Authentication Failed :( '
+            });
         } else {
           return done(null, user);
         }
       });
-    })
-    .catch(err => done(err));
+    } catch(e) {
+        console.log("error:", e)
+        done(e);
+    }
+     
 }
 
 const setup = function setup(User) {

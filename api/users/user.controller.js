@@ -1,9 +1,9 @@
 'use strict';
 
 const User = require('./user.schema');
-// const config = require('../../config/environment');
 const { config } = require('../../config')
 const jwt = require('jsonwebtoken');
+const connectDb = require('../../lib/db');
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -34,23 +34,20 @@ const index = function index(req, res) {
 /**
  * Creates a new user
  */
-const create = function create(req, res) {
-  console.log(req);
+const create = ((req, res) => {
   var newUser = new User(req.body);
   newUser.provider = 'local';
-  newUser.role = 'user';
   console.log(req.body);
   newUser.name = req.body.name.toUpperCase();
-  newUser.lastname = req.body.lastname.toUpperCase();
-  newUser.save()
-    .then(function(user) {
+  //newUser.lastname = req.body.lastname.toUpperCase();
+  return newUser.save().then(function(user) {
+      console.log(" added -->", user._id)
       var token = jwt.sign({ _id: user._id }, config.secrets.session, {
-        expiresIn: 60 * 60 * 5
       });
       res.json({ token });
     })
     .catch(validationError(res));
-}
+})
 
 /**
  * Get a single user
