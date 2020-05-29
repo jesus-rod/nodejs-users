@@ -3,12 +3,9 @@
 const { Router } = require('express');
 const controller = require('./user.controller')
 const auth = require('../../auth/auth.service')
-const queries = require("../../lib/queries")
 
 var router = new Router();
 
-// utilizar graphQL en estasa rutas en vez del user controller
-// router.get('/', auth.hasRole('admin'), queries.index);
 router.get('/', controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/me', auth.isAuthenticated(), controller.me);

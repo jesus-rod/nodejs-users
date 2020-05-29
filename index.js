@@ -8,7 +8,6 @@ const gqlMiddleware = require('express-graphql')
 const { readFileSync } = require('fs')
 
 const resolvers = require('./lib/resolvers')
-//const passport = require('passport')
 const { config } = require('./config')
 const { join } = require('path')
 const connectDb = require('./lib/db')

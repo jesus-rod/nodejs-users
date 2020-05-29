@@ -3,7 +3,6 @@
 const User = require('./user.schema');
 const { config } = require('../../config');
 const jwt = require('jsonwebtoken');
-const connectDb = require('../../lib/db');
 
 function validationError(res, statusCode) {
   statusCode = statusCode || 422;
@@ -41,7 +40,6 @@ const create = (req, res) => {
   newUser.level = 'regular';
   console.log(req.body);
   newUser.name = req.body.name.toUpperCase();
-  //newUser.lastname = req.body.lastname.toUpperCase();
   return newUser
     .save()
     .then(function (user) {
