@@ -9,7 +9,7 @@ var router = new Router();
 
 // utilizar graphQL en estasa rutas en vez del user controller
 // router.get('/', auth.hasRole('admin'), queries.index);
-//router.get('/', queries.getUsers);
+router.get('/', controller.index);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);

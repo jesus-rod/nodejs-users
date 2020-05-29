@@ -1,22 +1,18 @@
 const passport = require('passport');
 const { Strategy } = require('passport-local');
-// const mongoose = require('mongoose')
-// const User = require('../api/users/user.schema')
 const connectDb = require('../../lib/db')
 
 const localAuthenticate = async(User, email, password, done) => {
  console.log('local authenticate with email', email)
  
-     
   let user
-  let db
 
     try {
-      db = await connectDb()
+      await connectDb()
       user = await User.findOne({
         email: email.toLowerCase()
       })
-      console.log("user name is", user.name)
+      console.log("user name is trying to log in", user.name)
       if(!user) {
         return done(null, false, {
           message: 'Este correo no se encuentra registrado en el sistema.'
