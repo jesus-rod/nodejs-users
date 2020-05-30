@@ -12,6 +12,7 @@ const { config } = require('./config')
 const { join } = require('path')
 const connectDb = require('./lib/db')
 const errorHandler = require('./lib/errorHandler')
+const helmet = require('helmet')
 
 
 const port = config.port
@@ -19,6 +20,8 @@ const isDev = process.env.NODE_ENV !== 'production'
 
 const app = express()
 app.use(cors())
+// protects against well known vulnerabilties according to developer.mozilla.org
+app.use(helmet()) 
 
 //conectarse a base de datos
 connectDb()
@@ -48,8 +51,6 @@ app.use('/api', gqlMiddleware({
 
 // Define el resto de las rutas en nuestra aplicacion
 require('./routes').MyRoutes(app);
-
-
 
 app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port}/api`)

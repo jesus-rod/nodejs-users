@@ -26,6 +26,7 @@
     "express-session": "^1.17.1",
     "graphql": "^15.0.0",
     "graphql-tools": "^5.0.0",
+    "helmet": "^3.22.0",
     "mongodb": "^3.5.7",
     "mongoose": "^5.9.15",
     "passport-local": "^1.0.0"
