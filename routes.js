@@ -13,6 +13,7 @@ const MyRoutes = function(app) {
   // parse application/json
   app.use(bodyParser.json());
   app.use('/apix/users', require('./api/users'));
+  app.use('/primertutorial', require('./api/posts'));
 
   app.use('/auth', require('./auth').router);
 
